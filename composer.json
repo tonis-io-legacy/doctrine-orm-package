@@ -9,14 +9,13 @@
     "description": "Spiffy\\DoctrineORMPackage is a package for SpiffyFramework that integrates Doctrine ORM.",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=5.4",
-        "doctrine/dbal": "~2.5@beta",
-        "doctrine/orm": "~2.5@dev",
-        "tonis/doctrine-package": "~1.0-dev"
+        "php": ">=5.5",
+        "doctrine/orm": "^2.5",
+        "tonis/doctrine-package": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "squizlabs/php_codesniffer": "~1.0"
+        "phpunit/phpunit": "^4.0",
+        "squizlabs/php_codesniffer": "^1.0"
     },
     "autoload": {
         "psr-4": {
