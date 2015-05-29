@@ -1,28 +1,18 @@
 <?php
 
-namespace Spiffy\DoctrineORMPackage;
+namespace Tonis\DoctrineORMPackage;
 
-use Doctrine\DBAL\Logging\EchoSQLLogger;
-use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\EntityManager;
-use Spiffy\Inject\Injector;
-use Spiffy\Inject\ServiceFactory;
+use Tonis\Di\Container;
+use Tonis\Di\ServiceFactoryInterface;
 
-final class EntityManagerFactory implements ServiceFactory
+final class EntityManagerFactory implements ServiceFactoryInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $config;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $connection;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $driver;
 
     /**
@@ -38,19 +28,19 @@ final class EntityManagerFactory implements ServiceFactory
     }
 
     /**
-     * @param Injector $i
+     * @param Container $di
      * @return \Doctrine\ORM\EntityManager
      */
-    public function createService(Injector $i)
+    public function createService(Container $di)
     {
         $configFactory = new ConfigurationFactory($this->config);
-        $config = $configFactory->createService($i);
+        $config = $configFactory->createService($di);
 
         $connectionFactory = new ConnectionFactory($this->connection, $config);
-        $connection = $connectionFactory->createService($i);
+        $connection = $connectionFactory->createService($di);
 
         $driverFactory = new DriverFactory($this->driver);
-        $driver = $driverFactory->createService($i);
+        $driver = $driverFactory->createService($di);
 
         $config->setMetadataDriverImpl($driver);
 

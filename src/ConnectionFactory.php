@@ -1,13 +1,13 @@
 <?php
 
-namespace Spiffy\DoctrineORMPackage;
+namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
-use Spiffy\Inject\Injector;
-use Spiffy\Inject\ServiceFactory;
+use Tonis\Di\Container;
+use Tonis\Di\ServiceFactoryInterface;
 
-final class ConnectionFactory  implements ServiceFactory
+final class ConnectionFactory implements ServiceFactoryInterface
 {
     /** @var \Doctrine\ORM\Configuration */
     private $config;
@@ -25,11 +25,11 @@ final class ConnectionFactory  implements ServiceFactory
     }
 
     /**
-     * @param Injector $i
+     * @param Container $di
      * @return \Doctrine\DBAL\Connection
      */
-    public function createService(Injector $i)
+    public function createService(Container $di)
     {
-        return DriverManager::getConnection($i['doctrine-orm'][$this->name]['connection'], $this->config);
+        return DriverManager::getConnection($di['doctrine-orm'][$this->name]['connection'], $this->config);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Spiffy\DoctrineORMPackage;
+namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Spiffy\DoctrinePackage\DriverFactory as DoctrineDriverFactory;
-use Spiffy\Inject\Injector;
-use Spiffy\Inject\ServiceFactory;
+use Tonis\Di\Container;
+use Tonis\DoctrinePackage\DriverFactory as DoctrineDriverFactory;
+use Tonis\Di\ServiceFactoryInterface;
 
-final class DriverFactory implements ServiceFactory
+final class DriverFactory implements ServiceFactoryInterface
 {
     /**
      * @var string
@@ -23,19 +23,23 @@ final class DriverFactory implements ServiceFactory
     }
 
     /**
-     * @param Injector $i
+     * @param Container $di
      * @return \Doctrine\ORM\Configuration
      */
-    public function createService(Injector $i)
+    public function createService(Container $di)
     {
         $driver = new MappingDriverChain();
+        $config = $di['doctrine-orm'][$this->name];
 
-        foreach ($i['doctrine-orm'][$this->name]['drivers'] as $namespace => $spec) {
+        if (isset($config['default_driver']) && !empty($config['default_driver'])) {
+            $driver->setDefaultDriver((new DoctrineDriverFactory($config['default_driver']))->createService($di));
+        }
+
+        foreach ($config['chained_drivers'] as $namespace => $spec) {
             if (empty($spec)) {
                 continue;
             }
-            $factory = new DoctrineDriverFactory($spec);
-            $driver->addDriver($factory->createService($i), $namespace);
+            $driver->addDriver((new DoctrineDriverFactory($spec))->createService($di), $namespace);
         }
 
         return $driver;

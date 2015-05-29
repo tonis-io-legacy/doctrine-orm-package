@@ -1,13 +1,13 @@
 <?php
 
-namespace Spiffy\DoctrineORMPackage;
+namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\ORM\Configuration;
-use Spiffy\Inject\Injector;
-use Spiffy\Inject\InjectorUtils;
-use Spiffy\Inject\ServiceFactory;
+use Tonis\Di\Container;
+use Tonis\Di\ContainerUtil;
+use Tonis\Di\ServiceFactoryInterface;
 
-final class ConfigurationFactory implements ServiceFactory
+final class ConfigurationFactory implements ServiceFactoryInterface
 {
     /**
      * @var string
@@ -23,23 +23,23 @@ final class ConfigurationFactory implements ServiceFactory
     }
 
     /**
-     * @param Injector $i
+     * @param Container $di
      * @return \Doctrine\ORM\Configuration
      */
-    public function createService(Injector $i)
+    public function createService(Container $di)
     {
-        $params = $i['doctrine-orm'][$this->name];
+        $params = $di['doctrine-orm'][$this->name];
         
         $config = new Configuration();
-        $config->setMetadataCacheImpl(InjectorUtils::get($i, $params['metadata_cache']));
-        $config->setQueryCacheImpl(InjectorUtils::get($i, $params['query_cache']));
-        $config->setResultCacheImpl(InjectorUtils::get($i, $params['result_cache']));
+        $config->setMetadataCacheImpl(ContainerUtil::get($di, $params['metadata_cache']));
+        $config->setQueryCacheImpl(ContainerUtil::get($di, $params['query_cache']));
+        $config->setResultCacheImpl(ContainerUtil::get($di, $params['result_cache']));
         $config->setProxyDir($params['proxy_dir']);
         $config->setProxyNamespace($params['proxy_namespace']);
         $config->setAutoGenerateProxyClasses($params['auto_generate_proxy_classes']);
         
         if (isset($params['sql_logger'])) {
-            $config->setSQLLogger(InjectorUtils::get($i, $params['sql_logger']));
+            $config->setSQLLogger(ContainerUtil::get($di, $params['sql_logger']));
         }
         
         return $config;
