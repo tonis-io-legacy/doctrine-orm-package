@@ -3,7 +3,7 @@
 namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Tonis\Di\Container;
+use Interop\Container\ContainerInterface;
 use Tonis\DoctrinePackage\DriverFactory as DoctrineDriverFactory;
 use Tonis\Di\ServiceFactoryInterface;
 
@@ -23,13 +23,13 @@ final class DriverFactory implements ServiceFactoryInterface
     }
 
     /**
-     * @param Container $di
+     * @param ContainerInterface $di
      * @return \Doctrine\ORM\Configuration
      */
-    public function createService(Container $di)
+    public function createService(ContainerInterface $di)
     {
         $driver = new MappingDriverChain();
-        $config = $di['doctrine-orm'][$this->name];
+        $config = $di['config']['doctrine-orm'][$this->name];
 
         if (isset($config['default_driver']) && !empty($config['default_driver'])) {
             $driver->setDefaultDriver((new DoctrineDriverFactory($config['default_driver']))->createService($di));

@@ -4,7 +4,7 @@ namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
-use Tonis\Di\Container;
+use Interop\Container\ContainerInterface;
 use Tonis\Di\ServiceFactoryInterface;
 
 final class ConnectionFactory implements ServiceFactoryInterface
@@ -25,11 +25,11 @@ final class ConnectionFactory implements ServiceFactoryInterface
     }
 
     /**
-     * @param Container $di
+     * @param ContainerInterface $di
      * @return \Doctrine\DBAL\Connection
      */
-    public function createService(Container $di)
+    public function createService(ContainerInterface $di)
     {
-        return DriverManager::getConnection($di['doctrine-orm'][$this->name]['connection'], $this->config);
+        return DriverManager::getConnection($di['config']['doctrine-orm'][$this->name]['connection'], $this->config);
     }
 }
