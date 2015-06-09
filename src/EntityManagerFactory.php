@@ -3,7 +3,7 @@
 namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\ORM\EntityManager;
-use Tonis\Di\Container;
+use Interop\Container\ContainerInterface;
 use Tonis\Di\ServiceFactoryInterface;
 
 final class EntityManagerFactory implements ServiceFactoryInterface
@@ -28,10 +28,10 @@ final class EntityManagerFactory implements ServiceFactoryInterface
     }
 
     /**
-     * @param Container $di
+     * @param ContainerInterface $di
      * @return \Doctrine\ORM\EntityManager
      */
-    public function createService(Container $di)
+    public function createService(ContainerInterface $di)
     {
         $configFactory = new ConfigurationFactory($this->config);
         $config = $configFactory->createService($di);

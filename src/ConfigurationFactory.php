@@ -3,7 +3,7 @@
 namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\ORM\Configuration;
-use Tonis\Di\Container;
+use Interop\Container\ContainerInterface;
 use Tonis\Di\ContainerUtil;
 use Tonis\Di\ServiceFactoryInterface;
 
@@ -23,12 +23,12 @@ final class ConfigurationFactory implements ServiceFactoryInterface
     }
 
     /**
-     * @param Container $di
+     * @param ContainerInterface $di
      * @return \Doctrine\ORM\Configuration
      */
-    public function createService(Container $di)
+    public function createService(ContainerInterface $di)
     {
-        $params = $di['doctrine-orm'][$this->name];
+        $params = $di['config']['doctrine-orm'][$this->name];
         
         $config = new Configuration();
         $config->setMetadataCacheImpl(ContainerUtil::get($di, $params['metadata_cache']));
