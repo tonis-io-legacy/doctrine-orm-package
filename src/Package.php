@@ -4,8 +4,8 @@ namespace Tonis\DoctrineORMPackage;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Tonis\Mvc\Package\AbstractPackage;
-use Tonis\Mvc\TonisConsole;
+use Tonis\Web\Package\AbstractPackage;
+use Tonis\Web\Console;
 use Interop\Container\ContainerInterface;
 
 class Package extends AbstractPackage
@@ -13,9 +13,9 @@ class Package extends AbstractPackage
     /**
      * {@inheritDoc}
      */
-    public function bootstrapConsole(TonisConsole $console)
+    public function bootstrapConsole(Console $console)
     {
-        $di = $console->getTonis()->di();
+        $di = $console->getApp()->getServiceContainer();
 
         $console->setHelperSet(ConsoleRunner::createHelperSet($di->get(EntityManager::class)));
         ConsoleRunner::addCommands($console);
